@@ -1891,6 +1891,7 @@ function gradeParlayPick(pick,stats,players,schedule,diagnostics={}){
   return {status:adjusted===0?"PUSH":adjusted>0?"HIT":"MISS",detail:team.score+"–"+opp.score+(spread?" · "+(adjusted>0?"covered":"did not cover"):"")};
  }
  if(!identity.name)return {status:"REVIEW",detail:"Player not recognized"};
+ if(!players||typeof players!=="object"||!Object.keys(players).length)return {status:"PENDING",detail:"Sleeper player directory unavailable; reload to retry"};
  const playerEntry=parlayPlayerEntry(players,identity.name);
  if(!playerEntry)return {status:"REVIEW",detail:"Player not found in Sleeper directory"};
  const [playerId,player]=playerEntry,stat=stats?.[playerId];
