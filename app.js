@@ -1980,7 +1980,7 @@ async function loadParlayWeek(week){
  const [stats,schedule,players]=await Promise.all([
   fetchJson("/api/sleeper-stats/regular/"+season+"/"+week,{attempts:1,timeoutMs:18000}).catch(error=>{statsError=error?.message||String(error);console.warn("Parlay Sleeper stats unavailable for week "+week,error);return null;}),
   fetchJson("/api/nfl-schedule?seasontype=2&week="+week+"&year="+encodeURIComponent(season),{attempts:1,timeoutMs:18000}).catch(error=>{console.warn("Parlay NFL schedule unavailable for week "+week,error);return null;}),
-  state.players?Promise.resolve(state.players):(state.playersPromise||=fetchJson("/players/nfl?active=true",{attempts:1,timeoutMs:25000}).then(v=>{state.players=v||{};return state.players}).catch(error=>{console.warn("Parlay player directory unavailable",error);return {}}))
+  state.players?Promise.resolve(state.players):(state.playersPromise||=fetchJson("/players/nfl",{attempts:2,timeoutMs:60000}).then(v=>{const directory=v?.players||v?.data||v; if(!directory||typeof directory!=="object"||Array.isArray(directory)||Object.keys(directory).length<1000)throw new Error("Sleeper returned an incomplete player directory"); state.players=directory; return state.players}).catch(error=>{state.playersPromise=null;console.warn("Parlay player directory unavailable; a later render can retry",error);return {}}))
  ]);
  const normalizedStats=normalizeParlayStats(stats);
  state.parlayDataByWeek[week]={loaded:true,stats:normalizedStats,statsError,schedule:schedule||null,players:players||{}};
