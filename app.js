@@ -898,18 +898,6 @@ async function showPlayoffEdition(week,editions){
    '<div class="pp-table-wrap"><table class="pp-table"><thead><tr><th>MANAGER</th><th>PLAYOFF ODDS</th><th>BYE WEEK ODDS</th><th>LAST PLACE ODDS</th><th>PROJECTED RECORD</th><th>PROJECTED PF</th><th>MOST LIKELY SEED</th></tr></thead><tbody>'+
    results.map((r,i)=>'<tr class="'+(i===5?"pp-cutoff":"")+'"><td><span class="pp-manager-rank">'+String(i+1).padStart(2,"0")+'</span><strong>'+escapeHtml(r.manager)+'</strong></td><td><div class="pp-odds-cell"><strong>'+(r.eliminated?"0.0%":r.odds<0.1?"<0.1%":r.odds.toFixed(1)+"%")+'</strong><span class="pp-odds-track"><i style="width:'+Math.max(0,Math.min(100,r.odds))+'%"></i></span></div></td><td><div class="pp-odds-cell"><strong>'+(r.byeOdds>0&&r.byeOdds<0.1?"<0.1%":r.byeOdds.toFixed(1)+"%")+'</strong><span class="pp-odds-track"><i style="width:'+Math.max(0,Math.min(100,r.byeOdds))+'%"></i></span></div></td><td><div class="pp-odds-cell"><strong>'+(r.lastPlaceOdds==null?"—":r.lastPlaceOdds>0&&r.lastPlaceOdds<0.1?"<0.1%":r.lastPlaceOdds.toFixed(1)+"%")+'</strong>'+(r.lastPlaceOdds==null?'':'<span class="pp-odds-track pp-last-place"><i style="width:'+Math.max(0,Math.min(100,r.lastPlaceOdds))+'%"></i></span>')+'</div></td><td class="pp-number">'+escapeHtml(r.record)+'</td><td class="pp-number">'+Number(r.pf).toFixed(1)+'</td><td><strong>#'+r.seed+'</strong><small class="pp-seed-note">'+Number(r.seedPct).toFixed(1)+'% of sims</small></td></tr>').join("")+
    '</tbody></table></div><p class="pp-explainer">Each saved edition runs 100,000 simulations of every remaining regular-season week, including a head-to-head result and a league-median result. Final standings are ordered by wins, then Points For. The top six qualify; the top two seeds receive a first-round bye. Future scoring is based on Sleeper projections with a 20-point standard deviation. Everyone sees the same published results until the next complete fantasy week is published.</p><p class="pp-footnote">This is an archived snapshot. It does not recalculate when you visit the page or when rosters and projections change. Earlier editions remain available in the edition selector.</p>';
-  const failedDirectoryWeeks=Object.entries(state.parlayDataByWeek).filter(([,data])=>data?.playerError).map(([week])=>Number(week));
- if(failedDirectoryWeeks.length){
-  const retry=document.createElement("button");
-  retry.type="button";retry.className="parlay-retry-button";retry.dataset.parlayRetry="yes";
-  retry.textContent="RETRY PLAYER DATA";
-  retry.addEventListener("click",async()=>{
-   retry.disabled=true;retry.textContent="RETRYING…";
-   await Promise.all(failedDirectoryWeeks.map(week=>loadParlayWeek(week)));
-   renderParlays();
-  });
-  target.prepend(retry);
- }
  target.dataset.ready="yes";
  }catch(error){target.innerHTML='<div class="pp-error">The saved prediction edition could not be displayed: '+escapeHtml(error?.message||"Unknown error")+'</div>';target.dataset.ready="no";}
 }
@@ -2072,6 +2060,18 @@ function renderParlays(){
     if(!$("parlays-content")?.hidden)renderParlays();
    }
   })();
+ }
+ const failedDirectoryWeeks=Object.entries(state.parlayDataByWeek).filter(([,data])=>data?.playerError).map(([week])=>Number(week));
+ if(failedDirectoryWeeks.length){
+  const retry=document.createElement("button");
+  retry.type="button";retry.className="parlay-retry-button";retry.dataset.parlayRetry="yes";
+  retry.textContent="RETRY PLAYER DATA";
+  retry.addEventListener("click",async()=>{
+   retry.disabled=true;retry.textContent="RETRYING…";
+   await Promise.all(failedDirectoryWeeks.map(week=>loadParlayWeek(week)));
+   renderParlays();
+  });
+  target.prepend(retry);
  }
  target.dataset.ready="yes";
 }
