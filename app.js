@@ -511,7 +511,7 @@ async function loadSleeperPlayers() {
     return state.players;
   }
   if (!state.playersPromise) {
-    state.playersPromise = fetchJson("/players/nfl?active=true", { attempts: 2, timeoutMs: 60000 })
+    state.playersPromise = fetchJson("/api/sleeper-players", { attempts: 2, timeoutMs: 60000 })
       .then(value => {
         const directory = value?.players || value?.data || value;
         if (!directory || typeof directory !== "object" || Array.isArray(directory) || Object.keys(directory).length < 1000) {
