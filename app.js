@@ -1616,8 +1616,14 @@ function hallManagerHonors(name,stat){
  const championYears=[...PRE_SLEEPER_CHAMPIONS.filter(row=>row.champion===name).map(row=>row.year),...(state.hallHistory?.seasons||[]).filter(row=>row.champion===name).map(row=>row.year)].sort((a,b)=>a-b);
  const runnerUpYears=[...PRE_SLEEPER_CHAMPIONS.filter(row=>row.runnerUp===name).map(row=>row.year),...(state.hallHistory?.seasons||[]).filter(row=>row.runnerUp===name).map(row=>row.year)].sort((a,b)=>a-b);
  const thirdPlaceYears=(state.hallHistory?.seasons||[]).filter(row=>row.thirdPlace===name).map(row=>row.year).sort((a,b)=>a-b);
- const regularChampionYears=(state.hallHistory?.seasons||[]).filter(row=>row.regularSeasonChampion===name).map(row=>row.year).sort((a,b)=>a-b);
- const lastPlaceYears=(state.hallHistory?.seasons||[]).filter(row=>Number(row.completedRegularWeeks)>=Number(row.regularWeeks)&&row.standings?.at(-1)?.manager===name).map(row=>row.year).sort((a,b)=>a-b);
+ const regularChampionYears=[...new Set([
+  ...Object.entries(PRE_SLEEPER_STANDINGS).filter(([,rows])=>rows[0]?.[0]===name).map(([year])=>Number(year)),
+  ...(state.hallHistory?.seasons||[]).filter(row=>row.regularSeasonChampion===name).map(row=>Number(row.year))
+ ])].sort((a,b)=>a-b);
+ const lastPlaceYears=[...new Set([
+  ...Object.entries(PRE_SLEEPER_STANDINGS).filter(([,rows])=>rows.at(-1)?.[0]===name).map(([year])=>Number(year)),
+  ...(state.hallHistory?.seasons||[]).filter(row=>Number(row.completedRegularWeeks)>=Number(row.regularWeeks)&&row.standings?.at(-1)?.manager===name).map(row=>Number(row.year))
+ ])].sort((a,b)=>a-b);
  const honors=[];
  if(championYears.length)honors.push({icon:"🏆",tone:"gold",label:championYears.length+"× Champion",detail:championYears.join(", ")});
  if(runnerUpYears.length)honors.push({icon:"🏆",tone:"silver",label:runnerUpYears.length+"× Runner-up",detail:runnerUpYears.join(", ")});
