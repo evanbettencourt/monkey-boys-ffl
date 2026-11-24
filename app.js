@@ -225,6 +225,13 @@ const EDITORIAL_EDITIONS = {
 };
 function renderPowerRankings(week) {
   state.selectedRankingWeek=week;
+  // Navigation runs before init() finishes loading Sleeper's league core.
+  // Keep direct links to this tab from aborting startup on a cold refresh.
+  if (!state.teams?.size) {
+    const board=$("pr-board");
+    if (board) board.innerHTML='<div class="pr-empty">Loading league data from Sleeper…</div>';
+    return;
+  }
   const completedWeeks=Object.keys(state.weeks).map(Number).filter(w=>(state.weeks[w]||[]).filter(match=>num(match.points)>0).length>=state.teams.size);
   const publishedWeeks=Object.keys(EDITORIAL_EDITIONS).map(Number);
   const maxWeek=Math.min(getWeeksToLoad(),Math.max(1,...completedWeeks,...publishedWeeks)),archive=$("pr-archive"),select=$("week-select"),edition=EDITORIAL_EDITIONS[week];
