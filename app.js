@@ -44,7 +44,7 @@ async function fetchJson(path, options = {}) {
 }
 const STARTUP_CACHE_KEY = "monkey-boys-sleeper-cache-" + LEAGUE_ID;
 const RANKINGS_EDITION_KEY = "monkey-boys-rankings-edition-" + LEAGUE_ID;
-function readSavedRankingEdition() { try { const value = Number(localStorage.getItem(RANKINGS_EDITION_KEY)); return Number.isInteger(value) && value >= 0 && value <= 18 ? value : null; } catch { return null; } }
+function readSavedRankingEdition() { try { const raw = localStorage.getItem(RANKINGS_EDITION_KEY); if (raw === null) return null; const value = Number(raw); return Number.isInteger(value) && value >= 0 && value <= 18 ? value : null; } catch { return null; } }
 function saveRankingEdition(week) { try { localStorage.setItem(RANKINGS_EDITION_KEY, String(week)); } catch (error) { console.warn("Unable to save selected Power Rankings edition", error); } }
 function getDefaultRankingEdition() { const published = Object.keys(EDITORIAL_EDITIONS).map(Number).filter(week => Number.isInteger(week) && week > 0); return published.length ? Math.max(...published) : 1; }
 function readStartupCache() { try { const value = JSON.parse(localStorage.getItem(STARTUP_CACHE_KEY) || "null"); return value && typeof value === "object" ? value : {}; } catch { return {}; } }
@@ -232,7 +232,7 @@ function renderPowerRankings(week) {
   if(select)select.value=String(week);
   if(archive){
     archive.innerHTML=Array.from({length:maxWeek},(_,i)=>maxWeek-i).map(w=>'<button type="button" class="pr-archive-item '+(w===week?'active':'')+'" data-week="'+w+'"><span>Week '+String(w).padStart(2,"0")+'</span><small>'+(EDITORIAL_EDITIONS[w]?.date||'Edition pending')+'</small></button>').join("")+'<button type="button" class="pr-archive-item" data-week="0"><span>Post-Draft</span><small>September 2026</small></button>';
-    archive.querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>{const w=Number(btn.dataset.week);if(w===0){$("pr-week-title").textContent="Post-Draft";$("pr-edition-label").textContent="SEPTEMBER 2026";$("pr-board").innerHTML='<div class="pr-empty"><strong>POST-DRAFT RANKINGS</strong><p>The post-draft editorial edition has not been added yet.</p></div>';$("pr-rank-count").textContent="POST-DRAFT";archive.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===btn));const b=$("pr-reveal");if(b)b.hidden=true;}else renderPowerRankings(w);}));
+    archive.querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>{const w=Number(btn.dataset.week);if(w===0){state.selectedRankingWeek=0;saveRankingEdition(0);$("pr-week-title").textContent="Post-Draft";$("pr-edition-label").textContent="SEPTEMBER 2026";$("pr-board").innerHTML='<div class="pr-empty"><strong>POST-DRAFT RANKINGS</strong><p>The post-draft editorial edition has not been added yet.</p></div>';$("pr-rank-count").textContent="POST-DRAFT";archive.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===btn));const b=$("pr-reveal");if(b)b.hidden=true;}else renderPowerRankings(w);}));
   }
   $("pr-week-title").textContent="Week "+week;
   $("pr-edition-label").textContent=edition?.date||"EDITION PENDING";
@@ -355,7 +355,6 @@ function renderWeek(week) {
   renderScoreboard(week);
   renderStandings(week);
   renderLeagueStatus(week);
-  $("week-select").value=String(week);
   const statusParts = ["CONNECTED · " + state.teams.size + " TEAMS", "DATA THROUGH WEEK " + week];
   if (state.usingCachedCore) statusParts.push("SAVED LEAGUE DETAILS IN USE");
   if (state.recoveredWeeks.length) statusParts.push("SAVED WEEK DATA: " + state.recoveredWeeks.join(", "));
