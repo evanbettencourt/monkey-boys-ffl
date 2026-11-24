@@ -190,6 +190,33 @@ const EDITORIAL_EDITIONS = {
       "Trade impact: Joey added Tee Higgins and George Pickens; Ben added Jaxon Smith-Njigba; Tanz added Tony Pollard",
       "Injury watch: Kevin\u2019s loss of Puka Nacua is a major test for the league\u2019s highest-scoring team"
     ]
+  },
+  11: {
+    date: "NOVEMBER 24, 2026",
+    rankings: [
+      { manager: "Kevin", note: "Kevin moves into the top spot with the league's best record at 17-5 and the highest point total at 1,287.66. He handled Tanz 125.38-93.42 in Week 11 and remains one of the league's most complete teams. CeeDee Lamb, Breece Hall, Bucky Irving and George Kittle give him plenty of weekly firepower, and Tank Dell is a useful new addition." },
+      { manager: "Colby", note: "Colby is right on Kevin's heels at 16-6, with the league's second-highest point total and a share of the best all-play record. His 126.26-point win over Ders was business as usual for a roster built around Kyren Williams, Chuba Hubbard, Amon-Ra St. Brown and Tetairoa McMillan. The quarterback situation still carries some volatility, but the results are hard to argue with." },
+      { manager: "Ben", note: "Ben keeps stacking wins and sits third at 15-7 after taking care of Pat in Week 11. James Cook, Saquon Barkley, Jaxon Smith-Njigba and Matthew Golden give him a strong weekly core, and the depth remains a real advantage. He is close enough to the top two that one more strong week could change the shape of the race." },
+      { manager: "Marc", note: "Marc remains tied for third in the standings at 15-7, but a 115.46-point loss to Joey was a missed chance to keep pace with the leaders. The roster still has a high-end foundation in Jonathan Taylor, Nico Collins, Garrett Wilson and Trey McBride. A single loss doesn't change the outlook, but the top of the table is getting crowded." },
+      { manager: "Evan", note: "Evan delivered the week's top score with 134.76 and beat Butta by nearly 49 points. The 13-9 record still trails the top four, but his point total is third in the league and the Gibbs-Henry-Nabers core gives him a ceiling that can trouble anyone. The challenge now is turning that weekly upside into a sustained run." },
+      { manager: "Brandon", note: "Brandon is 13-9 and still has one of the league's stronger all-play profiles, but Week 11 was a grind: he beat Lee 84.24-77.12 while finishing below the league median. Ja'Marr Chase and Chris Olave give him plenty of upside, and the standings keep him in the playoff picture. He needs more weeks where the scoring matches the roster's potential." },
+      { manager: "Joey", note: "Joey earns a bump after knocking off Marc with 115.46 points, moving to 11-11 and back into the playoff conversation. The additions of Tee Higgins, George Pickens and Josh Downs have raised the ceiling of this lineup, while Patrick Mahomes and Bo Nix give him options at quarterback. The margin for error is thin, but this is a team nobody wants to see catch momentum." },
+      { manager: "Pat", note: "Pat falls to 11-11 after a 102.14-point effort still wasn't enough against Ben. Christian McCaffrey and Chase Brown provide a strong running back foundation, and Zay Flowers can swing a matchup, but the supporting cast has to deliver more consistently. Pat is still within striking distance, though the next few weeks matter a lot." },
+      { manager: "Butta", note: "Butta drops to 9-13 after Evan put up the week's best score against him. Joe Burrow, Rashee Rice, Jaylen Waddle and Sam LaPorta give this roster legitimate upside, but quarterback depth and injuries have made the weekly floor difficult to trust. Adding Elic Ayomanor helps the receiver room; the bigger need is a clean stretch of health and production." },
+      { manager: "Lee", note: "Lee is 7-15 after a narrow 84.24-77.12 loss to Brandon. The roster still has star power in Bijan Robinson, Justin Jefferson, DeVonta Smith and Jayden Daniels, but the record leaves almost no room for another stumble. The talent is obvious; the wins have not followed." },
+      { manager: "Ders", note: "Ders took another tough hit, falling 126.26-57.90 to Colby for the lowest score of the week. At 3-19, the playoff race is over, and the focus shifts to finishing the season with some dignity and avoiding the bottom spot. Josh Allen remains a weekly difference-maker, but the lineup needs much more support around him." },
+      { manager: "Tanz", note: "Tanz is officially eliminated from the playoff race at 2-20, but Week 11 offered at least one small positive: 93.42 points was above the 89.88 league median. Kevin still beat him head-to-head, so the standings remain rough. The priority now is simple — avoid last place and get out of the punishment conversation." }
+    ],
+    headline: "Kevin takes the lead as the playoff race tightens behind him",
+    feature: "Week 11 reshuffled the top of the table. Kevin's win over Tanz moved him to 17-5 and the league's best record, while Colby stayed one game back after another strong scoring week. Ben and Marc remain tied at 15-7, and the next tier is a crowded 13-9 group featuring Evan and Brandon. At the other end, the playoff race is over for Ders and Tanz, but the last-place battle is still very much alive. Evan led all scorers at 134.76; Ders finished last at 57.90.",
+    notes: [
+      "Top score: Evan — 134.76 points",
+      "Lowest score: Ders — 57.90 points",
+      "League median: 89.88; Tanz was the only losing head-to-head team to finish above it",
+      "Biggest win: Evan beat Butta 134.76–86.14",
+      "Standings watch: Kevin leads at 17-5, with Colby one game back at 16-6",
+      "Playoff picture: Ders and Tanz are mathematically eliminated; the top six remain Kevin, Colby, Ben, Marc, Evan and Brandon"
+    ]
   }
 };
 function renderPowerRankings(week) {
