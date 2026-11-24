@@ -1820,13 +1820,25 @@ function normalizeParlayStats(value){
    }
   }
  }
- const rows=Array.isArray(source)?source:source&&typeof source==="object"?Object.entries(source).map(([id,row])=>({player_id:row?.player_id??row?.id??id,...(row&&typeof row==="object"?row:{})})):[];
  const normalized={};
- for(const row of rows){
-  const id=String(row?.player_id??row?.playerId??row?.id??"");
-  if(!id)continue;
-  const nested=row?.stats&&typeof row.stats==="object"?row.stats:{};
-  normalized[id]={...row,...nested};
+ const add=(id,row)=>{
+  const key=String(id??"");
+  if(!key||!row||typeof row!=="object")return;
+  const nested=row.stats&&typeof row.stats==="object"?row.stats:{};
+  normalized[key]={...row,...nested};
+ };
+ if(Array.isArray(source)){
+  for(const row of source)add(row?.player_id??row?.playerId??row?.id,row);
+ }else if(source&&typeof source==="object"){
+  for(const [sourceId,row] of Object.entries(source)){
+   if(!row||typeof row!=="object")continue;
+   // Sleeper's stats response is keyed by player ID. Preserve that key even
+   // when a row also contains a different player_id/id field.
+   add(sourceId,row);
+   if(row.player_id!=null)add(row.player_id,row);
+   if(row.playerId!=null)add(row.playerId,row);
+   if(row.id!=null)add(row.id,row);
+  }
  }
  return normalized;
 }
@@ -2051,8 +2063,8 @@ function renderParlays(){
   state.parlayHistoryLoading=true;
   (async()=>{
    try {
-    for(let start=1;start<=10;start+=3){
-     await Promise.all(Array.from({length:Math.min(3,11-start)},(_,j)=>loadParlayWeek(start+j)));
+    for(let start=1;start<=11;start+=3){
+     await Promise.all(Array.from({length:Math.min(3,12-start)},(_,j)=>loadParlayWeek(start+j)));
      if(!$("parlays-content")?.hidden)renderParlays();
     }
    } finally {
