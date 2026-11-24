@@ -1617,12 +1617,14 @@ function hallManagerHonors(name,stat){
  const runnerUpYears=[...PRE_SLEEPER_CHAMPIONS.filter(row=>row.runnerUp===name).map(row=>row.year),...(state.hallHistory?.seasons||[]).filter(row=>row.runnerUp===name).map(row=>row.year)].sort((a,b)=>a-b);
  const thirdPlaceYears=(state.hallHistory?.seasons||[]).filter(row=>row.thirdPlace===name).map(row=>row.year).sort((a,b)=>a-b);
  const regularChampionYears=(state.hallHistory?.seasons||[]).filter(row=>row.regularSeasonChampion===name).map(row=>row.year).sort((a,b)=>a-b);
+ const lastPlaceYears=(state.hallHistory?.seasons||[]).filter(row=>Number(row.completedRegularWeeks)>=Number(row.regularWeeks)&&row.standings?.at(-1)?.manager===name).map(row=>row.year).sort((a,b)=>a-b);
  const honors=[];
  if(championYears.length)honors.push({icon:"🏆",tone:"gold",label:championYears.length+"× Champion",detail:championYears.join(", ")});
  if(runnerUpYears.length)honors.push({icon:"🏆",tone:"silver",label:runnerUpYears.length+"× Runner-up",detail:runnerUpYears.join(", ")});
  if(thirdPlaceYears.length)honors.push({icon:"🏆",tone:"bronze",label:thirdPlaceYears.length+"× 3rd Place",detail:thirdPlaceYears.join(", ")});
  if(regularChampionYears.length)honors.push({icon:"🥇",tone:"gold",label:regularChampionYears.length+"× Regular Season Champion",detail:regularChampionYears.join(", ")});
  if(playoffYears.length)honors.push({icon:"🥈",tone:"silver",label:playoffYears.length+"× Playoff Appearance",detail:playoffYears.join(", ")});
+ if(lastPlaceYears.length)honors.push({icon:"💩",tone:"",label:lastPlaceYears.length+"× Last Place Finish",detail:lastPlaceYears.join(", ")});
  return honors;
 }
 function hallPreSleeperBracket(year){
