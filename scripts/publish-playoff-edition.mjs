@@ -113,7 +113,13 @@ async function main() {
   const actual=standings(teams,matchups,completed),actualById=new Map(actual.map(t=>[t.id,t]));
   const future=Array.from({length:regular-completed},(_,i)=>completed+i+1);
   const maxWins=new Map(teams.map(t=>[t.id,actualById.get(t.id).w+future.length*2]));
-  const eliminated=new Map(teams.map(t=>[t.id,teams.filter(o=>o.id!==t.id&&actualById.get(o.id).w>maxWins.get(t.id)).length>=6]));
+  const mathematicalStatus=new Map(teams.map(team=>{
+    const own=actualById.get(team.id),maxOwn=maxWins.get(team.id);
+    const opponents=teams.filter(other=>other.id!==team.id).map(other=>actualById.get(other.id));
+    const eliminated=opponents.filter(other=>other.w>maxOwn).length>=6;
+    const canFinishAhead=opponents.filter(other=>other.w+future.length*2>=own.w).length;
+    return [team.id,{eliminated,playoffsClinched:!eliminated&&canFinishAhead<6,byeClinched:!eliminated&&canFinishAhead<2,firstPlaceClinched:!eliminated&&canFinishAhead===0,actualWins:own.w,actualPf:own.pf}];
+  }));
   const rostered=new Set(rosters.flatMap(r=>[...(r.players||[]),...(r.reserve||[])].map(String)));
   const slots=(league.roster_positions||[]).filter(s=>!["BN","IR"].includes(String(s).toUpperCase()));
   const weekly=new Map(), opponents=new Map();
@@ -154,7 +160,7 @@ async function main() {
   }
   const results=teams.map(team=>{
     const a=accum.get(team.id),seedIndex=a.seeds.indexOf(Math.max(...a.seeds)),actualRow=actualById.get(team.id);
-    return {rosterId:team.id,manager:team.name,odds:eliminated.get(team.id)?0:a.playoffs/SIMULATIONS*100,byeOdds:a.bye/SIMULATIONS*100,lastPlaceOdds:a.lastPlace/SIMULATIONS*100,record:(a.wins/SIMULATIONS).toFixed(1)+"–"+(a.losses/SIMULATIONS).toFixed(1),pf:actualRow.pf+a.pf/SIMULATIONS,seed:seedIndex+1,seedPct:a.seeds[seedIndex]/SIMULATIONS*100,eliminated:eliminated.get(team.id)};
+    const status=mathematicalStatus.get(team.id);\n    return {rosterId:team.id,manager:team.name,odds:status.eliminated?0:a.playoffs/SIMULATIONS*100,byeOdds:a.bye/SIMULATIONS*100,lastPlaceOdds:a.lastPlace/SIMULATIONS*100,actualWins:status.actualWins,actualPf:status.actualPf,mathematicallyEliminated:status.eliminated,playoffsClinched:status.playoffsClinched,byeClinched:status.byeClinched,firstPlaceClinched:status.firstPlaceClinched,record:(a.wins/SIMULATIONS).toFixed(1)+"–"+(a.losses/SIMULATIONS).toFixed(1),pf:actualRow.pf+a.pf/SIMULATIONS,seed:seedIndex+1,seedPct:a.seeds[seedIndex]/SIMULATIONS*100,eliminated:status.eliminated};
   }).sort((a,b)=>b.odds-a.odds||b.pf-a.pf);
   const edition={season:SEASON,week:completed,publishedAt:new Date().toISOString(),simulations:SIMULATIONS,standardDeviation:SD,regularSeasonWeeks:regular,results};
   const filename=`week-${String(completed).padStart(2,"0")}.json`;
