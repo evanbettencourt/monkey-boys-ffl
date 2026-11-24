@@ -461,6 +461,7 @@ async function init() {
     renderWeek(initialWeek);
     renderPowerRankings(rankingWeek);
     renderSchedule();
+    renderScheduleComparison();
     $("updated-at").textContent = state.usingCachedCore ? "SLEEPER API · SAVED LEAGUE DETAILS IN USE" : "SLEEPER API · REFRESHING WEEKLY DATA";
     updateStartupStatus();
 
@@ -505,6 +506,8 @@ async function init() {
         renderPowerRankings(state.selectedRankingWeek ?? rankingWeek);
       }
       renderSchedule();
+      // Keep Schedule Comparison in sync as each batch of weekly matchup data arrives.
+      renderScheduleComparison();
       $("updated-at").textContent = state.usingCachedCore || state.recoveredWeeks.length ? "SLEEPER API · SAVED DATA USED WHERE NEEDED" : "SLEEPER API · PUBLIC LEAGUE DATA";
       updateStartupStatus();
     }
