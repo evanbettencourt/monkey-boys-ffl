@@ -858,7 +858,19 @@ function renderMatchups(week = state.matchupWeek, dataReady = false) {
 
 
 function renderScheduleComparison(){
- const target=$("pp-schedule-comparison");if(!target||!state.teams?.size)return;
+ const target=$("pp-schedule-comparison");if(!target)return;
+ if(!state.teams?.size){
+  target.innerHTML='<div class="pp-loading">Loading league matchup data…</div>';
+  if(target.dataset.waitingForCore!=="yes"){
+   target.dataset.waitingForCore="yes";
+   sleeperCoreReady.then(ready=>{
+    delete target.dataset.waitingForCore;
+    if(ready)renderScheduleComparison();
+    else target.innerHTML='<div class="pp-error">League data could not be loaded, so Schedule Comparison is unavailable. Please refresh and try again.</div>';
+   });
+  }
+  return;
+ }
  const includeMedian=$("pp-include-median")?.checked!==false;
  const baseTeams=[...state.teams.values()];
  let standingsWeeks=0;
