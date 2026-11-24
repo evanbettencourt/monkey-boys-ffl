@@ -3382,3 +3382,6 @@ body:has(.pr-page:not([hidden])) footer{width:min(100%,1180px);margin:0 auto;pad
 .pp-edition-control{display:flex;flex-direction:column;gap:7px;min-width:170px;color:var(--muted);font:10px var(--mono);letter-spacing:.1em}.pp-edition-control select{min-width:170px}@media(max-width:600px){.pp-section-heading{align-items:flex-start;gap:14px;flex-direction:column}.pp-edition-control,.pp-edition-control select{width:100%}}
 
 .pp-odds-track.pp-last-place i{background:#d94b55}
+
+/* Mathematical status labels in the playoff predictor. */
+.pp-status-tag{display:inline-block;margin:4px 0 0 7px;padding:3px 6px;border:1px solid;border-radius:4px;font:800 8px/1 "DM Sans",Arial,sans-serif;letter-spacing:.1em;vertical-align:middle;white-space:nowrap}.pp-status-tag.eliminated{border-color:#ff4f91;color:#ff9fc2}.pp-status-tag.clinched{border-color:#50c99a;color:#7de0b4}.pp-status-tag.bye{border-color:#55dff3;color:#8cecff}.pp-status-tag.first{border-color:#e8b83d;color:#f4d47b}

@@ -16,7 +16,12 @@
       "pf": 1606.3514740334442,
       "seed": 1,
       "seedPct": 27.089000000000002,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 17,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 3,
@@ -28,7 +33,12 @@
       "pf": 1625.899183992727,
       "seed": 1,
       "seedPct": 36.606,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 15,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 4,
@@ -40,7 +50,12 @@
       "pf": 1588.7773480362384,
       "seed": 1,
       "seedPct": 30.733,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 16,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 5,
@@ -52,7 +67,12 @@
       "pf": 1538.63752144735,
       "seed": 4,
       "seedPct": 29.535,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 15,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 1,
@@ -64,7 +84,12 @@
       "pf": 1599.2887590358455,
       "seed": 5,
       "seedPct": 34.142,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 13,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 12,
@@ -76,7 +101,12 @@
       "pf": 1565.0188070035433,
       "seed": 6,
       "seedPct": 48.372,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 13,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 8,
@@ -88,7 +118,12 @@
       "pf": 1434.5328934523484,
       "seed": 8,
       "seedPct": 35.562,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 11,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 6,
@@ -100,7 +135,12 @@
       "pf": 1472.4485023723278,
       "seed": 7,
       "seedPct": 37.993,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 11,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 9,
@@ -112,7 +152,12 @@
       "pf": 1417.037725580084,
       "seed": 10,
       "seedPct": 54.345,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 9,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 7,
@@ -124,7 +169,12 @@
       "pf": 1428.0541713831058,
       "seed": 9,
       "seedPct": 39.772999999999996,
-      "eliminated": false
+      "eliminated": false,
+      "actualWins": 7,
+      "mathematicallyEliminated": false,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 11,
@@ -136,7 +186,12 @@
       "pf": 1350.4898599275073,
       "seed": 11,
       "seedPct": 93.572,
-      "eliminated": true
+      "eliminated": true,
+      "actualWins": 3,
+      "mathematicallyEliminated": true,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     },
     {
       "rosterId": 2,
@@ -148,7 +203,12 @@
       "pf": 1187.6170190588773,
       "seed": 12,
       "seedPct": 96.46900000000001,
-      "eliminated": true
+      "eliminated": true,
+      "actualWins": 2,
+      "mathematicallyEliminated": true,
+      "playoffsClinched": false,
+      "byeClinched": false,
+      "firstPlaceClinched": false
     }
   ]
 }
