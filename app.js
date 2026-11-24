@@ -1206,7 +1206,7 @@ function hallLegacyStandingsMarkup(year){
  if(!rows.length)return "";
  return '<section class="hall-season-standings"><h3>FINAL REGULAR-SEASON STANDINGS</h3><div class="hall-season-table-wrap"><table class="hall-season-table"><thead><tr><th>#</th><th>MANAGER</th><th>W-L</th><th>PF</th><th>PA</th><th>STATUS</th></tr></thead><tbody>'+rows.map(row=>'<tr><td>'+row.rank+'</td><td>'+escapeHtml(row.manager)+'</td><td>'+row.wins+'-'+row.losses+'</td><td>—</td><td>—</td><td>'+(row.playoff?'<span class="hall-season-playoff">PLAYOFFS</span>':'—')+'</td></tr>').join("")+'</tbody></table></div><p class="hall-archive-note">PRE-SLEEPER ARCHIVE · POINTS-FOR AND POINTS-AGAINST WERE NOT RETAINED.</p></section>';
 }
-const RETIRED_MANAGERS=["Schmeef","Sam","Campbell","Roth","Hess"];
+const RETIRED_MANAGERS=["Roth","Sam","Schmeef","Hess","Campbell"];
 const MANAGER_TENURES={Brandon:"2025–present",Roth:"2017–2018",Sam:"2017–2020",Schmeef:"2021–2024",Hess:"2017",Campbell:"2018"};
 function getPreSleeperManagerStats(){
  const stats=new Map();
