@@ -1,10 +1,6 @@
 name: Publish playoff editions
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - .github/workflows/publish-playoff-editions.yml
 permissions:
   contents: write
 jobs:
