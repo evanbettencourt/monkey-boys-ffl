@@ -1629,7 +1629,7 @@ function hallManagerHonors(name,stat){
  if(runnerUpYears.length)honors.push({icon:"🏆",tone:"silver",label:runnerUpYears.length+"× Runner-up",detail:runnerUpYears.join(", ")});
  if(thirdPlaceYears.length)honors.push({icon:"🏆",tone:"bronze",label:thirdPlaceYears.length+"× 3rd Place",detail:thirdPlaceYears.join(", ")});
  if(regularChampionYears.length)honors.push({icon:"🥇",tone:"gold",label:regularChampionYears.length+"× Regular Season Champion",detail:regularChampionYears.join(", ")});
- if(playoffYears.length)honors.push({icon:"🥈",tone:"silver",label:playoffYears.length+"× Playoff Appearance",detail:playoffYears.join(", ")});
+ if(playoffYears.length)honors.push({icon:"🎟️",tone:"",label:playoffYears.length+"× Playoff Appearance",detail:playoffYears.join(", ")});
  if(lastPlaceYears.length)honors.push({icon:"💩",tone:"",label:lastPlaceYears.length+"× Last Place Finish",detail:lastPlaceYears.join(", ")});
  return honors;
 }
