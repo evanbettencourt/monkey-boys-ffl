@@ -160,7 +160,8 @@ async function main() {
   }
   const results=teams.map(team=>{
     const a=accum.get(team.id),seedIndex=a.seeds.indexOf(Math.max(...a.seeds)),actualRow=actualById.get(team.id);
-    const status=mathematicalStatus.get(team.id);\n    return {rosterId:team.id,manager:team.name,odds:status.eliminated?0:a.playoffs/SIMULATIONS*100,byeOdds:a.bye/SIMULATIONS*100,lastPlaceOdds:a.lastPlace/SIMULATIONS*100,actualWins:status.actualWins,actualPf:status.actualPf,mathematicallyEliminated:status.eliminated,playoffsClinched:status.playoffsClinched,byeClinched:status.byeClinched,firstPlaceClinched:status.firstPlaceClinched,record:(a.wins/SIMULATIONS).toFixed(1)+"–"+(a.losses/SIMULATIONS).toFixed(1),pf:actualRow.pf+a.pf/SIMULATIONS,seed:seedIndex+1,seedPct:a.seeds[seedIndex]/SIMULATIONS*100,eliminated:status.eliminated};
+    const status=mathematicalStatus.get(team.id);
+    return {rosterId:team.id,manager:team.name,odds:status.eliminated?0:a.playoffs/SIMULATIONS*100,byeOdds:a.bye/SIMULATIONS*100,lastPlaceOdds:a.lastPlace/SIMULATIONS*100,actualWins:status.actualWins,actualPf:status.actualPf,mathematicallyEliminated:status.eliminated,playoffsClinched:status.playoffsClinched,byeClinched:status.byeClinched,firstPlaceClinched:status.firstPlaceClinched,record:(a.wins/SIMULATIONS).toFixed(1)+"–"+(a.losses/SIMULATIONS).toFixed(1),pf:actualRow.pf+a.pf/SIMULATIONS,seed:seedIndex+1,seedPct:a.seeds[seedIndex]/SIMULATIONS*100,eliminated:status.eliminated};
   }).sort((a,b)=>b.odds-a.odds||b.pf-a.pf);
   const edition={season:SEASON,week:completed,publishedAt:new Date().toISOString(),simulations:SIMULATIONS,standardDeviation:SD,regularSeasonWeeks:regular,results};
   const filename=`week-${String(completed).padStart(2,"0")}.json`;
