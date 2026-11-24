@@ -257,7 +257,7 @@ function renderPowerRankings(week) {
     const cls=move>0?"up":move<0?"dn":"ev",dir=move>0?"up":move<0?"dn":"ev",color=colorFor(t);
     return '<article class="pr-card" style="--tc:'+color+';--sp:'+color+'" data-prev="'+(prior||rank)+'" data-final="'+rank+'" data-move="'+move+'" data-dir="'+dir+'">'+
       '<div class="pr-rank"><div class="pr-num"><span class="v prev">'+(prior||rank)+'</span><span class="v final">'+rank+'</span></div><span class="pr-mv '+cls+'">'+txt+'</span></div>'+
-      '<div class="pr-mid"><div class="pr-nmrow"><span class="nm">'+escapeHtml(entry.manager)+'</span><span class="pr-meta"><span class="rec"><span class="w">'+t.wins+'</span><span class="dash">-</span><span class="l">'+t.losses+'</span></span><span class="dot">·</span><span class="pf">PF '+fmt(t.pf)+' ('+pfRanks.get(t.name)+'th)</span><span class="dot">·</span><span class="pa">PA '+fmt(t.pa)+' ('+paRanks.get(t.name)+'th)</span></span></div>'+
+      '<div class="pr-mid"><div class="pr-nmrow"><span class="nm">'+escapeHtml(entry.manager)+'</span><span class="pr-meta"><span class="rec"><span class="w">'+t.wins+'</span><span class="dash">-</span><span class="l">'+t.losses+'</span></span><span class="dot">·</span><span class="pf">PF '+fmt(t.pf)+' ('+ordinal(pfRanks.get(t.name))+')</span><span class="dot">·</span><span class="pa">PA '+fmt(t.pa)+' ('+ordinal(paRanks.get(t.name))+')</span></span></div>'+
       '<div class="bl-wrap"><div class="bl">'+(entry.note?escapeHtml(entry.note):'<span class="pr-note-pending">Commentary pending.</span>')+'</div></div></div></article>';
   }).join("");
   setTextIfPresent("pr-rank-count",hasEdition?edition.rankings.length+" / 12 RANKED":"12 MANAGERS");
