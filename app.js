@@ -225,14 +225,13 @@ const EDITORIAL_EDITIONS = {
 };
 function renderPowerRankings(week) {
   state.selectedRankingWeek=week;
-  saveRankingEdition(week);
   const completedWeeks=Object.keys(state.weeks).map(Number).filter(w=>(state.weeks[w]||[]).filter(match=>num(match.points)>0).length>=state.teams.size);
   const publishedWeeks=Object.keys(EDITORIAL_EDITIONS).map(Number);
   const maxWeek=Math.min(getWeeksToLoad(),Math.max(1,...completedWeeks,...publishedWeeks)),archive=$("pr-archive"),select=$("week-select"),edition=EDITORIAL_EDITIONS[week];
   if(select)select.value=String(week);
   if(archive){
     archive.innerHTML=Array.from({length:maxWeek},(_,i)=>maxWeek-i).map(w=>'<button type="button" class="pr-archive-item '+(w===week?'active':'')+'" data-week="'+w+'"><span>Week '+String(w).padStart(2,"0")+'</span><small>'+(EDITORIAL_EDITIONS[w]?.date||'Edition pending')+'</small></button>').join("")+'<button type="button" class="pr-archive-item" data-week="0"><span>Post-Draft</span><small>September 2026</small></button>';
-    archive.querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>{const w=Number(btn.dataset.week);if(w===0){$("pr-week-title").textContent="Post-Draft";$("pr-edition-label").textContent="SEPTEMBER 2026";$("pr-board").innerHTML='<div class="pr-empty"><strong>POST-DRAFT RANKINGS</strong><p>The post-draft editorial edition has not been added yet.</p></div>';$("pr-rank-count").textContent="POST-DRAFT";archive.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===btn));const b=$("pr-reveal");if(b)b.hidden=true;}else renderPowerRankings(w);}));
+    archive.querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>{const w=Number(btn.dataset.week);if(w===0){$("pr-week-title").textContent="Post-Draft";$("pr-edition-label").textContent="SEPTEMBER 2026";$("pr-board").innerHTML='<div class="pr-empty"><strong>POST-DRAFT RANKINGS</strong><p>The post-draft editorial edition has not been added yet.</p></div>';$("pr-rank-count").textContent="POST-DRAFT";archive.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===btn));const b=$("pr-reveal");if(b)b.hidden=true;}else {saveRankingEdition(w);renderPowerRankings(w);}}));
   }
   $("pr-week-title").textContent="Week "+week;
   $("pr-edition-label").textContent=edition?.date||"EDITION PENDING";
@@ -453,7 +452,7 @@ async function init() {
     const select = $("week-select");
     select.innerHTML = Array.from({ length: maxWeek }, (_, index) => `<option value="${index + 1}">WEEK ${index + 1}</option>`).join("");
     if (!select.dataset.listenerAttached) {
-      select.addEventListener("change", () => { renderPowerRankings(Number(select.value)); });
+      select.addEventListener("change", () => { const week=Number(select.value); saveRankingEdition(week); renderPowerRankings(week); });
       select.dataset.listenerAttached = "yes";
     }
 
