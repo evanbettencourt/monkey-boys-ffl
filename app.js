@@ -2,7 +2,7 @@ const LEAGUE_ID = "1313563024161787904";
 const API = "/api/sleeper";
 const $ = (id) => document.getElementById(id);
 const setTextIfPresent = (id, value) => { const element = $(id); if (element) element.textContent = value; };
-const state = { league: null, users: [], rosters: [], weeks: {}, selectedWeek: 1, weekManuallySelected: false, rankingsByWeek: {}, failedWeeks: [], recoveredWeeks: [], usingCachedCore: false, draftOrder: null, draftSeason: null, nflState: null, currentWeek: 1, matchupWeek: 1, players: null, playersPromise: null, matchupDataByWeek: {}, parlayDataByWeek: {}, hallHistory: null, hallHistoryPromise: null, hallHistoryError: null };
+const state = { league: null, users: [], rosters: [], weeks: {}, selectedWeek: 1, selectedRankingWeek: null, weekManuallySelected: false, rankingsByWeek: {}, failedWeeks: [], recoveredWeeks: [], usingCachedCore: false, draftOrder: null, draftSeason: null, nflState: null, currentWeek: 1, matchupWeek: 1, players: null, playersPromise: null, matchupDataByWeek: {}, parlayDataByWeek: {}, hallHistory: null, hallHistoryPromise: null, hallHistoryError: null };
 let resolveSleeperCoreReady;
 const sleeperCoreReady = new Promise(resolve=>{resolveSleeperCoreReady=resolve;});
 
@@ -43,6 +43,10 @@ async function fetchJson(path, options = {}) {
   throw lastError || new Error("Sleeper request failed for " + path);
 }
 const STARTUP_CACHE_KEY = "monkey-boys-sleeper-cache-" + LEAGUE_ID;
+const RANKINGS_EDITION_KEY = "monkey-boys-rankings-edition-" + LEAGUE_ID;
+function readSavedRankingEdition() { try { const value = Number(localStorage.getItem(RANKINGS_EDITION_KEY)); return Number.isInteger(value) && value >= 0 && value <= 18 ? value : null; } catch { return null; } }
+function saveRankingEdition(week) { try { localStorage.setItem(RANKINGS_EDITION_KEY, String(week)); } catch (error) { console.warn("Unable to save selected Power Rankings edition", error); } }
+function getDefaultRankingEdition() { const published = Object.keys(EDITORIAL_EDITIONS).map(Number).filter(week => Number.isInteger(week) && week > 0); return published.length ? Math.max(...published) : 1; }
 function readStartupCache() { try { const value = JSON.parse(localStorage.getItem(STARTUP_CACHE_KEY) || "null"); return value && typeof value === "object" ? value : {}; } catch { return {}; } }
 function writeStartupCache(patch) { try { const current = readStartupCache(); localStorage.setItem(STARTUP_CACHE_KEY, JSON.stringify({ ...current, ...patch, savedAt: Date.now() })); } catch (error) { console.warn("Unable to save local Sleeper fallback cache", error); } }
 function hasCachedCore(cache, key) { return key === "league" ? !!(cache.league && cache.league.league_id) : Array.isArray(cache[key]) && cache[key].length > 0; }
@@ -220,7 +224,8 @@ const EDITORIAL_EDITIONS = {
   }
 };
 function renderPowerRankings(week) {
-  state.selectedWeek=week;
+  state.selectedRankingWeek=week;
+  saveRankingEdition(week);
   const completedWeeks=Object.keys(state.weeks).map(Number).filter(w=>(state.weeks[w]||[]).filter(match=>num(match.points)>0).length>=state.teams.size);
   const publishedWeeks=Object.keys(EDITORIAL_EDITIONS).map(Number);
   const maxWeek=Math.min(getWeeksToLoad(),Math.max(1,...completedWeeks,...publishedWeeks)),archive=$("pr-archive"),select=$("week-select"),edition=EDITORIAL_EDITIONS[week];
@@ -415,7 +420,7 @@ async function init() {
       if (rankingsSeasonTag) rankingsSeasonTag.textContent = season + " SEASON · EST. 2017";
       if (refresh) {
         renderWeek(state.selectedWeek || 1);
-        renderPowerRankings(state.selectedWeek || 1);
+        renderPowerRankings(state.selectedRankingWeek ?? getDefaultRankingEdition());
         renderSchedule();
         updateStartupStatus();
         $("updated-at").textContent = state.usingCachedCore ? "SLEEPER API · SAVED LEAGUE DETAILS IN USE" : "SLEEPER API · LIVE LEAGUE DETAILS";
@@ -444,17 +449,19 @@ async function init() {
     // Allow the independent NFL-state request to update currentWeek when it arrives.
     void nflStatePromise;
     const initialWeek = cachedLatest;
+    const savedRankingWeek = readSavedRankingEdition();
+    const rankingWeek = savedRankingWeek === 0 || (savedRankingWeek && EDITORIAL_EDITIONS[savedRankingWeek]) ? savedRankingWeek : getDefaultRankingEdition();
     const select = $("week-select");
     select.innerHTML = Array.from({ length: maxWeek }, (_, index) => `<option value="${index + 1}">WEEK ${index + 1}</option>`).join("");
     if (!select.dataset.listenerAttached) {
-      select.addEventListener("change", () => { state.weekManuallySelected=true; renderPowerRankings(Number(select.value)); });
+      select.addEventListener("change", () => { renderPowerRankings(Number(select.value)); });
       select.dataset.listenerAttached = "yes";
     }
 
     // Render immediately from the last saved data. On a first visit, render the shell
     // with placeholders and fill it in as small batches arrive.
     renderWeek(initialWeek);
-    renderPowerRankings(initialWeek);
+    renderPowerRankings(rankingWeek);
     renderSchedule();
     $("updated-at").textContent = state.usingCachedCore ? "SLEEPER API · SAVED LEAGUE DETAILS IN USE" : "SLEEPER API · REFRESHING WEEKLY DATA";
     updateStartupStatus();
@@ -494,10 +501,10 @@ async function init() {
         const nextSelect = $("week-select");
         nextSelect.innerHTML = Array.from({ length: maxWeek }, (_, index) => `<option value="${index + 1}">WEEK ${index + 1}</option>`).join("");
         renderWeek(latestCompletedWeek);
-        renderPowerRankings(latestCompletedWeek);
+        renderPowerRankings(state.selectedRankingWeek ?? rankingWeek);
       } else {
         renderWeek(state.selectedWeek || initialWeek);
-        renderPowerRankings(state.selectedWeek || initialWeek);
+        renderPowerRankings(state.selectedRankingWeek ?? rankingWeek);
       }
       renderSchedule();
       $("updated-at").textContent = state.usingCachedCore || state.recoveredWeeks.length ? "SLEEPER API · SAVED DATA USED WHERE NEEDED" : "SLEEPER API · PUBLIC LEAGUE DATA";
@@ -2136,7 +2143,7 @@ function setupNavigation() {
     if (target === "hall") renderHallOfFame();
     if (target === "parlays") renderParlays();
     if (target === "lottery") renderLotteryHistory();
-    if (target === "rankings") renderPowerRankings(state.selectedWeek);
+    if (target === "rankings") renderPowerRankings(state.selectedRankingWeek ?? getDefaultRankingEdition());
     if (options.updateUrl) {
       const nextHash = "#" + target;
       if (window.location.hash !== nextHash) history.replaceState(null, "", nextHash);
